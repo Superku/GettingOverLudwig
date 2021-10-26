@@ -19,7 +19,9 @@ This demo might be sufficient to launch this game without issues.
 
 After you have installed let's say the demo version, copy this repository to some subfolder (for example in projects) of your Gamestudio installation folder.
 Copy over ackXInput.dll from this repository (located in acknex_plugins) to acknex_plugins of your Gamestudio installation folder.
+
 Now open SED, then load gettingOverLudwig.c (not the WDL file). There are 3 triangle launch buttons at the top bar of the program. Click the left one that says "Run current script" on hover-over.
+
 The game should launch successfully. If you see a mostly black screen with dimly lit objects instead of golden honeycombs filling the screen then the engine did not launch as the Pro version (presumably).
 
 HOWEVER... this is a run-on-the-fly compile which does NOT generate an executable or portable game. For that you need to go to File -> Publish Main Script (I suggest going to Options -> Preferences -> Environment first and checking "Use current script for Run/Publish" first). I bet this feature will be disabled in the demo version though.
@@ -30,4 +32,5 @@ I vouch for the already compiled binaries (on itch and included in this reposito
 When in doubt and you understandably do not want to spend money on this antiquated engine please ask Ludwig if he wants to play a game made by "Superku" anyway - he knows me to some degree.
 
 Thank you.
+
 DM me on Twitter if you have any questions.
