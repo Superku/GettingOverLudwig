@@ -1,0 +1,52 @@
+Log of A8 Engine 8.47.1 run at Tue Oct 26 20:23:01 2021
+Hendrik on Windows NT/2000/XP version 6.2 Build 9200
+Options gettingOverLudwig.c -nx 128 -eq -nwnd -diag -ns -te -nx 128
+App: C:\GStudio8\acknex.exe in C:\GStudio8\LudwigJam\
+
+DI interface opened
+Start Window opened(c) Conitec - www.3dgamestudio.com
+A8 Engine - Pro Edition V8.47.1 - Mar  9 2016
+Development version
+Registered to: Felix Pohl
+
+DI Microsoft-PC-Joysticktreiber 5 axes 16 buttons initialized
+Mouse found
+Joystick found
+NVIDIA GeForce GTX 1080 pure T&L device 1ff9 detected
+D3D device NVIDIA GeForce GTX 1080 1ff9 selected.
+PATH models\
+PATH shaders\
+ackXinput.dll opened
+kuSound.dll opened
+Compiling GETTINGOVERLUDWIG.C - [Esc] to abort..
+>>> spearGame.c compile start <<<
+...........................
+>>> spearGame.c compiled <<<
+...
+EnumDisplaySettingsExA: function not found............... 0.579 sec
+Running GETTINGOVERLUDWIG.C
+13 objects
+Main started at 0.690
+D3D_Init Window: 640x480 -> Window: 1x640x480x32
+Video memory found: 4093 MB
+LevelInit at 0.779
+57 entities 1 cameras 0 lights 0 sounds 0 paths
+ 1 lmaps 0 textures...ok
+LevelReady at 0.913
+cached_startup started
+Main loop at 0.941....
+1st frame with 4093 MB. at 1.010
+D3D_Resize Window: 1920x1920 -> Window: 1x1920x1920x32
+Normal exit at 10.942
+Close level,DLL,objects
+Free input,funcs,panels,defs,syns,views,strings,vars..ok
+Free sounds,bmaps,fonts,hash,defs1,script..ok
+Close dx,multimedia,D3D,engine,nexus..ok
+A8 Engine - Pro Edition V8.47.1 - Mar  9 2016
+(c) Conitec - www.3dgamestudio.com
+Registered to: Felix Pohl
+Unfreed: 1042, CCH, 72 bytes
+Unfreed: 1105, CCH, 72 bytes
+Unfreed: 1107, CH2, 12 bytes
+Unfreed: 1110, CH2, 20 bytes
+Close window at 10.961
