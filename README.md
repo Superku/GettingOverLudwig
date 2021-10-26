@@ -9,7 +9,7 @@ Gamestudio A8 can be downloaded here: http://www.conitec.net/english/gstudio/dow
 It's an 80MB setup file. From that setup file you can install a free version, a demo or the full version.
 The free version does not support a bunch of features, such as plug-ins. As a result, the free version CANNOT be used to successfully compile and play this game (it will compile but then give errors when the app window opens).
 
-There is a so called Extra version for 25Eur and a Pro version for 199Eur. I use the Pro version. The Extra version is missing Isometric rendering (not sure what they mean with Render-to-texture, in particular if you cannot use render chain setups without this). Therefore, the game will not function right with this version either.
+There is a so called Extra version for 25Eur and a Pro version for 199Eur. I use the Pro version. The Extra version is missing Isometric rendering and other things (not sure what they mean with Render-to-texture, in particular if you cannot use render chain setups without this). Therefore, the game will not function right with this version either.
 Version comparison: http://www.conitec.net/english/gstudio/order8.php
 
 The setup file allows you to install a demo version. Counting old Laptops and PCs I have 5 machines at my place but sadly no one on which Gamestudio was never installed. I tried to run the demo but no luck ("trial period expired").
