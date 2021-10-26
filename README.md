@@ -28,7 +28,7 @@ The game should launch successfully. If you see a mostly black screen with dimly
 HOWEVER... this is a run-on-the-fly compile which does NOT generate an executable or portable game. For that you need to go to File -> Publish Main Script (I suggest going to Options -> Preferences -> Environment first and checking "Use current script for Run/Publish" first). I bet this feature will be disabled in the demo version though.
 So... sadly the only way to compile your own executable of this game (unless I'm overseeing something) would be to buy the Pro version of this engine.
 
-The folder gettingoverludwig.cd contains a fully built game including all required files.
+The folder [gettingoverludwig.cd](gettingoverludwig.cd) contains a fully built game including all required files.
 
 I vouch for the already compiled binaries (on itch and included in this repository) with my name, that they do not include malicious code or anything that could be harmful to Ludwig's PC or the stream. Here's my twitter: https://twitter.com/realSuperku
 
