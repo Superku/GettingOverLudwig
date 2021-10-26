@@ -1,7 +1,8 @@
 # Getting over... Ludwig
 This is the full source, code and assets, for my Ludwig Jam entry.
 
-The game is written in lite-C with only one (for now as there's no sound - I ran out of time) very basic XInput DLL written in C++. It's the same file Pogostuck uses just with a different name, here it is called ackXInput.dll. 
+The game is written in lite-C with only one (for now as there's no sound - I ran out of time) very basic XInput DLL written in C++. It's the same file Pogostuck uses just with a different name, here it is called ackXInput.dll. There are multiple other DLLs the engine may or may not use, depending on the system (experience shows this, running games made with this engine on hundreds of thousands of other machines).
+
 Getting over... Ludwig runs on the A8 engine (same as Pogostuck) which is part of the (3D) Gamestudio toolset: http://www.conitec.net/english/gstudio/index.php
 
 Gamestudio A8 can be downloaded here: http://www.conitec.net/english/gstudio/download.php
@@ -26,6 +27,8 @@ The game should launch successfully. If you see a mostly black screen with dimly
 
 HOWEVER... this is a run-on-the-fly compile which does NOT generate an executable or portable game. For that you need to go to File -> Publish Main Script (I suggest going to Options -> Preferences -> Environment first and checking "Use current script for Run/Publish" first). I bet this feature will be disabled in the demo version though.
 So... sadly the only way to compile your own executable of this game (unless I'm overseeing something) would be to buy the Pro version of this engine.
+
+The folder gettingoverludwig.cd contains a fully built game including all required files.
 
 I vouch for the already compiled binaries (on itch and included in this repository) with my name, that they do not include malicious code or anything that could be harmful to Ludwig's PC or the stream. Here's my twitter: https://twitter.com/realSuperku
 
