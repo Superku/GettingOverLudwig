@@ -5,6 +5,7 @@ The game is written in lite-C with only one (for now as there's no sound - I ran
 Getting over... Ludwig runs on the A8 engine (same as Pogostuck) which is part of the (3D) Gamestudio toolset: http://www.conitec.net/english/gstudio/index.php
 
 Gamestudio A8 can be downloaded here: http://www.conitec.net/english/gstudio/download.php
+
 It's an 80MB setup file. From that setup file you can install a free version, a demo or the full version.
 The free version does not support a bunch of features, such as plug-ins. As a result, the free version CANNOT be used to successfully compile and play this game (it will compile but then give errors when the app window opens).
 
