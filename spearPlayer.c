@@ -254,7 +254,18 @@ void playerMove()
 			entHoneyCombo.x = entDummy.x;
 			entHoneyCombo.z = entDummy.z;
 			var animPerc = 0;
-			if(menuIntroState == 20) animPerc = menuIntroStateProgress;
+			if(menuIntroState == 20)
+			{
+				animPerc = menuIntroStateProgress;
+				#ifdef INCLUDE_SOUND
+					if(animPerc > 74 && !entHoneyCombo.skill69)
+					{
+						entHoneyCombo.skill69 = 1;
+						kuSoundPlay2D(KS_SFX_INTRO_JUMP, false, 40, 1, 0);
+					}
+				#endif
+			}
+			else entHoneyCombo.skill69 = 0;
 			ent_animate(entHoneyCombo, "intro", animPerc, 0);
 			entHoneyCombo.pan = -25;
 			entHoneyCombo.tilt = 0;
@@ -482,6 +493,10 @@ void playerMove()
 					// no sparks? <- no, they signal a bad impact... hm!
 					int num = 1+random(4);
 					if(num > 0) effect(p_spearImpactStreaks, num, target, normal); // maybe after all...
+					#ifdef INCLUDE_SOUND
+						float pan = fclamp((float)(target.x-entDummy.x)/1500.0+0.025,-0.05,0.1);
+						kuSoundPlay2D(KS_SFX_SPEAR_HIT0+(int)random(2), false, 80+random(10), 1+random(0.15), pan);
+					#endif
 				}
 			}
 			else
@@ -538,6 +553,10 @@ void playerMove()
 				playerDataPointer->slowTiltTimer = 5.75; // was: 10
 				playerDataPointer->boostProgress = 180;
 				playerDataPointer->turnSpeed = clamp(playerDataPointer->turnSpeed*1.25 - asinv(normal.x)*0.125, -30, 30);
+				#ifdef INCLUDE_SOUND
+					//kuSoundPlay2D(KS_SFX_SPEAR_LAUNCH0+(int)random(2), false, 85+random(15), 1+random(0.15), 0);
+					kuSoundPlay2D(KS_SFX_SPEAR_LAUNCH0, false, 50+random(10), 1.15-pow(abs(playerDataPointer->loadPower)/32.0,1)*0.5, random(0.05)-0.025);
+				#endif
 			}
 		}
 		else
@@ -574,6 +593,10 @@ void playerMove()
 				effect(p_characterHitStars, 10, target, normal);
 				effect(p_spearImpactGlow, 1, target, vector(1,2,0)); // 2nd vel parameter is alpha fac
 				p_characterHitStars_cooldown = 5;
+				#ifdef INCLUDE_SOUND
+					float pan = fclamp((float)(target.x-entDummy.x)/1500.0,-0.05,0.05); //+0.025
+					kuSoundPlay2D(KS_SFX_PLAYER_IMPACT0+(int)random(3), false, 75+random(15), 1+random(0.15), pan);
+				#endif
 			}
 		}
 	}
@@ -722,12 +745,18 @@ void playerMove()
 	if(entDummy.z < -4580)
 	{
 		deathPercent = 100;
+		#ifdef INCLUDE_SOUND
+			kuSoundPlay2D(KS_SFX_DEATHSCARE, false, 90, 1, 0);
+		#endif
 		mapReset();
 	}
 	if(entDummy.x > 4128 && entDummy.z > 5270)
 	{
 		outroState = 1;
 		outroStateProgress = 0;
+		#ifdef INCLUDE_SOUND
+			kuSoundPlay2D(KS_SFX_WIN, false, 50, 1, 0);
+		#endif
 	}
 }
 

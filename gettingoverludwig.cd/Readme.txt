@@ -12,7 +12,7 @@ Final Title: Getting over... Ludwig
 Prototyping Title: SpearGame
 Fake Working Title: Spearstruck
 
-Version: 1.0
+Version: 1.1 - now with sound (sounds from freesound.org, menu loop by Sunsai: https://freesound.org/people/Sunsai/ )
 
 ​A difficult and in parts punishing game about climbing a cliff using a spear.
 

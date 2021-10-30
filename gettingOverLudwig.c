@@ -7,7 +7,9 @@
 
 #define PRAGMA_PRINT "\n>>> spearGame.c compile start <<<\n";
 
+#define INCLUDE_SOUND
 //#define DEVTRUE // if defined == development build
+
 #include <acknex.h> // include game engine
 #ifdef DEVTRUE
     //#include <default.c> // include default super basic debugging code
@@ -18,8 +20,13 @@
 #include "console2.h"
 #include "kuGetDisplayModes.h"
 #include "spearTypes.h"
-#include "ackXinput.h"
 #include "spearHelper.c"
+#ifdef INCLUDE_SOUND
+	#include "kuSoundSpear.h"
+	#include "kuSoundSpear.c"
+#endif
+
+#include "ackXinput.h"
 #include "spearInput.h"
 #include "spearInput.c"
 // sound ...
@@ -51,6 +58,7 @@ void gameInitPostLevelLoad()
 void mapLoad()
 {
     menuClearBeforeLevelLoad();
+  	//kuSoundStopAllLevelSounds(0);
     memset(entityContainer, 0, sizeof(ENTITYCONTAINER));
     gameInitPreLevelLoad();
     level_load("map.wmb");
@@ -74,6 +82,13 @@ void gameUpdate()
 void gameQuit()
 {
     sys_exit("");
+}
+
+void on_exit_event()
+{
+    #ifdef INCLUDE_SOUND
+        kuSoundDestroyDevice();
+    #endif
 }
 
 int screenshotActive = 0;
@@ -102,6 +117,9 @@ void mainFrameEvent()
 	    draw_quad(NULL,vector(0,0,0),NULL,vector(screen_size.x+1,screen_size.y+1,0),NULL,COLOR_BLACK,deathPercent*0.30,0);
 	    draw_quad(NULL,vector(0,0,0),NULL,vector(screen_size.x+1,screen_size.y+1,0),NULL,COLOR_RED,deathPercent*0.75,0);
     }
+    #ifdef INCLUDE_SOUND
+    	kuSoundUpdateFrame(camera);
+    #endif
 }
 
 
@@ -150,6 +168,15 @@ void main()
     //menuOpenPerc = 100;
     vec_set(sky_color, vector(20,180,250));
     wait(1); // wait for the directX device and initial engine boot up
+    #ifdef INCLUDE_SOUND
+        cprintf2("\nmain function at frame(%d): calling kuSoundInit(%p)...", ITF, hWnd);
+        int pSetCoopLevelResult = -1;
+        int ires = kuSoundInit(hWnd, &pSetCoopLevelResult);
+        if(!ires) kuSoundInitialized = 1;
+        kuSoundInitErrorCode = ires;
+        cprintf2("OK(%d, SetCoopLevel %d). calling kuSoundSourcesInit...",ires,pSetCoopLevelResult);
+        kuSoundSourcesInit();
+    #endif
     on_f1 = NULL; // disable engine crap (mostly when default.c is included)
     on_f2 = NULL;
     on_f3 = NULL;
@@ -161,6 +188,7 @@ void main()
     on_f9 = NULL;
     on_f10 = gameQuit;
     on_esc = NULL;  //menuToggle
+    on_exit = on_exit_event;
 
     video_window(NULL, NULL, 1, "Getting over... Ludwig");
     wait(1);
@@ -171,6 +199,9 @@ void main()
     wait(1);
 	SetWindowPos(hWnd,HWND_TOP,0,0,0,0, SWP_SHOWWINDOW | SWP_NOSIZE); // | SWP_NOMOVE | SWP_NOSIZE  | SWP_NOMOVE
     pp_init();
+    #ifdef INCLUDE_SOUND
+        KUSOUND_INSTANCE_MUSIC = kuSoundPlay2D(KS_MUSIC_MENU, true, 100, 1, 0);
+    #endif
 
     on_frame = mainFrameEvent;
 }

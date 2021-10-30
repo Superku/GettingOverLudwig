@@ -1,0 +1,82 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="263675__porkmuncher__bow-release_data" version="1.3.0" audacityversion="2.4.2" sel0="1.7146604938" sel1="2.2777777778" vpos="0" h="1.6304605888" zoom="2054.6341463415" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="TITLE" value="Mu&#x030a;j film 3"/>
+		<tag name="Encoded by" value="ProTranscoderTool_sb (Apple MP3"/>
+	</tags>
+	<wavetrack name="263675__porkmuncher__bow-release" isSelected="0" height="150" minimized="0" channel="2" linked="0" mute="0" solo="0" rate="44100" gain="0.707946" pan="0.0" colorindex="0">
+		<waveclip offset="0.88775510" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="46464">
+				<waveblock start="0">
+					<simpleblockfile filename="e08083bd.au" len="46464" min="-0.891251" max="0.891224" rms="0.190347"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="536106__eminyildirim__sword-hits-metal" isSelected="1" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="44100" gain="0.398107" pan="0.0" colorindex="0">
+		<waveclip offset="-0.37331066" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="602700">
+				<waveblock start="0">
+					<simpleblockfile filename="e080835c.au" len="262144" min="-0.615215" max="0.548313" rms="0.025511"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0808a90.au" len="262144" min="-0.462239" max="0.502685" rms="0.022323"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0808919.au" len="78412" min="-0.354463" max="0.472049" rms="0.020413"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="536106__eminyildirim__sword-hits-metal" isSelected="1" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="44100" gain="0.398107" pan="0.0" colorindex="0">
+		<waveclip offset="-0.37331066" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="602700">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808f1b.au" len="262144" min="-0.593545" max="0.54371" rms="0.021107"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e08084a9.au" len="262144" min="-0.440373" max="0.433817" rms="0.01577"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0808fc5.au" len="78412" min="-0.342171" max="0.421065" rms="0.014382"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Mix" isSelected="0" height="150" minimized="0" channel="0" linked="1" mute="1" solo="0" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="-0.37331066" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="602700">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808806.au" len="262144" min="-0.776698" max="0.790085" rms="0.057635"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0808754.au" len="262144" min="-0.184021" max="0.200123" rms="0.008887"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0808ecc.au" len="78412" min="-0.141114" max="0.187926" rms="0.008127"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Mix" isSelected="0" height="150" minimized="0" channel="1" linked="0" mute="1" solo="0" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="-0.37331066" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="602700">
+				<waveblock start="0">
+					<simpleblockfile filename="e08081dd.au" len="262144" min="-0.728432" max="0.748666" rms="0.057351"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0808fbc.au" len="262144" min="-0.175316" max="0.172706" rms="0.006278"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e08088bc.au" len="78412" min="-0.136221" max="0.167629" rms="0.005726"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

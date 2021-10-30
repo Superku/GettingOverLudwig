@@ -45,7 +45,7 @@ BMAP* hexagonsNM_tga = "hexagons3NM.tga";
 
 int fpsCapModeActive = 2;
 int fpsCapModes[6] = { 60, 75, 120, 144, 160, 240 };
-int kuSoundMasterVolume = 5;
+int kuSoundMasterVolumeInt = 5;
 
 ////////////////////////////////////////////
 
@@ -64,8 +64,14 @@ void menuClearBeforeLevelLoad()
 
 void menuOpen()
 {
+    if(outroState > 0) return; // added in post jam release
+    //if(menuActive) return;
     menuActive = 1;
     camera.y = -4096;
+
+    #ifdef INCLUDE_SOUND
+        kuSoundPlay2D(KS_SFX_MENU_OPEN, false, kuSoundMenuSoundVolumePerc*0.5, 1, 0);
+    #endif
 
     MENUPAGE *page = &menuManager.pages[MENUPAGE_MAIN];
     page->itemSelected = !menuClosedOnce;
@@ -106,6 +112,11 @@ void menuOpen()
 
 void menuClose()
 {
+    #ifdef INCLUDE_SOUND
+        static int doNotPlayFirstTime = 1;
+        if(doNotPlayFirstTime) doNotPlayFirstTime = 0;
+        else kuSoundPlay2D(KS_SFX_MENU_CLOSE, false, kuSoundMenuSoundVolumePerc*0.5, 1, 0);
+    #endif
     menuActive = 0;
     menuPagePerc = 0;
     menuOpenPerc = 0;
@@ -265,6 +276,9 @@ void itemEventExecute(MENUPAGE *page, MENUITEM *item, int eventID)
         {
             cprintf1("\n itemEventExecute: NEW GAME at frame %d", ITF);
             menuIntroState = 20;
+            #ifdef INCLUDE_SOUND
+                kuSoundPlay2D(KS_SFX_MENU_NEWGAME, false, kuSoundMenuSoundVolumePerc, 1, 0);
+            #endif
         }
         else
         {
@@ -290,6 +304,9 @@ void itemEventExecute(MENUPAGE *page, MENUITEM *item, int eventID)
         menuManager.pageIDActive = page->previousID;
         MENUPAGE *page2 = &menuManager.pages[MENUPAGE_MAIN];
         page2->itemSelected = !menuClosedOnce;
+        #ifdef INCLUDE_SOUND
+            kuSoundPlay2D(KS_SFX_MENU_BACK, false, kuSoundMenuSoundVolumePerc, 1, 0);
+        #endif
         break;
     }
 }
@@ -364,25 +381,38 @@ void menuApplyResolution()
 void menuPageUpdate( MENUPAGE *page)
 {
     int i;
+    int oldNum = page->itemSelected;
     if(inputJustPressed(KUINPUT_BUTTON_UP)) page->itemSelected--;
     if(inputJustPressed(KUINPUT_BUTTON_DOWN)) page->itemSelected++;
     if(page->ID == 0 && !menuClosedOnce)
     {
-    if(page->itemSelected < 1) page->itemSelected = page->numItemsUsed-1;
-    if(page->itemSelected >= page->numItemsUsed) page->itemSelected = 1;
+        if(page->itemSelected < 1) page->itemSelected = page->numItemsUsed-1;
+        if(page->itemSelected >= page->numItemsUsed) page->itemSelected = 1;
     }
     else
     {
-    if(page->itemSelected < 0) page->itemSelected = page->numItemsUsed-1;
-    if(page->itemSelected >= page->numItemsUsed) page->itemSelected = 0;
+        if(page->itemSelected < 0) page->itemSelected = page->numItemsUsed-1;
+        if(page->itemSelected >= page->numItemsUsed) page->itemSelected = 0;
     }
+    #ifdef INCLUDE_SOUND
+        if(oldNum != page->itemSelected)
+        {
+            kuSoundPlay2D(KS_SFX_MENU_UPDOWN, false, kuSoundMenuSoundVolumePerc, 1, 0);
+        }
+    #endif
     menuPageItemSelected = page->itemSelected;
 
     MENUITEM *itemSelected = &page->items[page->itemSelected];
 
     if(inputJustPressed(KUINPUT_BUTTON_JUMP) && itemSelected->type == MENUITEM_TYPE_LEFT)
     {
-        if(itemSelected->eventID >= 0) itemEventExecute(page, itemSelected, itemSelected->eventID);
+        if(itemSelected->eventID >= 0)
+        {
+            itemEventExecute(page, itemSelected, itemSelected->eventID);
+            #ifdef INCLUDE_SOUND
+                if(itemSelected->eventID != 4 && itemSelected->eventID != 1) kuSoundPlay2D(KS_SFX_MENU_SELECT, false, kuSoundMenuSoundVolumePerc, 1, 0);
+            #endif
+        }
     }
     int isDirty = menuManager.pageIDActive * (inputJustPressed(KUINPUT_BUTTON_LEFT) || inputJustPressed(KUINPUT_BUTTON_RIGHT));
     isDirty += page->isDirty;
@@ -408,6 +438,9 @@ void menuPageUpdate( MENUPAGE *page)
                         if(item->eventID == 100) menuSetMonitorMode(!item->isYesNo);
                         if(item->eventID == 104) playerLeftRightInverted = item->isYesNo;
                         if(item->eventID == 105) showTimer = item->isYesNo;
+                        #ifdef INCLUDE_SOUND
+                            kuSoundPlay2D(KS_SFX_MENU_CHANGE, false, kuSoundMenuSoundVolumePerc, 1, 0);
+                        #endif
                     }
                 }
                 else
@@ -416,6 +449,7 @@ void menuPageUpdate( MENUPAGE *page)
                     {
                         int resolutionCountTotal = MMInfoGetDisplayNumModes(-1);
                         if(resolutionIDWanted == -2) resolutionIDWanted = resolutionCountTotal-1;
+                        int oldValue = resolutionIDWanted;
                         if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_LEFT)) resolutionIDWanted = maxv(resolutionIDWanted-1, 0);
                         if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_RIGHT)) resolutionIDWanted = minv(resolutionIDWanted+1, resolutionCountTotal-1);
                         resolutionIDWanted = clamp(resolutionIDWanted, 0, resolutionCountTotal-1);
@@ -434,33 +468,50 @@ void menuPageUpdate( MENUPAGE *page)
                             str_cpy(tmpStr, "Press Space/ Enter or (A) on the controller to change resolution.");
                             draw_text_via_txt(tmpStr, cached_fnt, screen_size.x*0.5, screen_size.y*0.2, color, CENTER_X | OUTLINE);
                         }*/
+                        #ifdef INCLUDE_SOUND
+                            if(oldValue != resolutionIDWanted) kuSoundPlay2D(KS_SFX_MENU_CHANGE, false, kuSoundMenuSoundVolumePerc, 1, 0);
+                        #endif
                     }
                     if(item->eventID == 102)
                     {
+                        int oldValue = fpsCapModeActive;
                         if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_LEFT)) fpsCapModeActive = maxv(fpsCapModeActive-1, 0);
                         if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_RIGHT)) fpsCapModeActive = minv(fpsCapModeActive+1, 5);
                         fps_max = fpsCapModes[fpsCapModeActive];
                         str_printf(item->strValue, "<%3d>", (int)fps_max);
+                        #ifdef INCLUDE_SOUND
+                            if(oldValue != fpsCapModeActive) kuSoundPlay2D(KS_SFX_MENU_CHANGE, false, kuSoundMenuSoundVolumePerc, 1, 0);
+                        #endif
                     }
                     if(item->eventID == 103)
                     {
-                        if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_LEFT)) kuSoundMasterVolume = maxv(kuSoundMasterVolume-1, 0);
-                        if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_RIGHT)) kuSoundMasterVolume = minv(kuSoundMasterVolume+1, 10);
-                        str_printf(item->strValue, "<%3d>", (int)kuSoundMasterVolume );
-                        if(item == itemSelected)
-                        {
-                            str_cpy(tmpStr, "There is no sound at all in the game currently, sorry!");
-                            draw_text_via_txt(tmpStr, cached_fnt, screen_size.x*0.5, 20, COLOR_WHITE, CENTER_X | OUTLINE);
-                        }
+                        int oldValue = kuSoundMasterVolumeInt;
+                        if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_LEFT)) kuSoundMasterVolumeInt = maxv(kuSoundMasterVolumeInt-1, 0);
+                        if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_RIGHT)) kuSoundMasterVolumeInt = minv(kuSoundMasterVolumeInt+1, 10);
+                        str_printf(item->strValue, "<%3d>", (int)kuSoundMasterVolumeInt );
+                        #ifdef INCLUDE_SOUND
+                            kuSoundSetMasterVolumeIn100(kuSoundMasterVolumeInt*10);
+                            if(oldValue != kuSoundMasterVolumeInt) kuSoundPlay2D(KS_SFX_MENU_CHANGE, false, kuSoundMenuSoundVolumePerc, 1, 0);
+                            #else
+                            if(item == itemSelected)
+                            {
+                                str_cpy(tmpStr, "There is no sound at all in the game currently, sorry!");
+                                draw_text_via_txt(tmpStr, cached_fnt, screen_size.x*0.5, 20, COLOR_WHITE, CENTER_X | OUTLINE);
+                            }
+                        #endif
                     }
                     if(item->eventID == 107)
                     {
+                        int oldValue = backgroundRenderMode;
                         if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_LEFT)) backgroundRenderMode = maxv(backgroundRenderMode-1, 0);
                         if(item == itemSelected && inputJustPressed(KUINPUT_BUTTON_RIGHT)) backgroundRenderMode = minv(backgroundRenderMode+1, 3);
                         if(backgroundRenderMode == 0) str_cpy(item->strValue, "<OFF>");
                         if(backgroundRenderMode == 1) str_cpy(item->strValue, "<SIMPLIFIED>");
                         if(backgroundRenderMode == 2) str_cpy(item->strValue, "<DEFAULT>");
                         if(backgroundRenderMode == 3) str_cpy(item->strValue, "<HIGH-RES>");
+                        #ifdef INCLUDE_SOUND
+                            if(oldValue != backgroundRenderMode) kuSoundPlay2D(KS_SFX_MENU_CHANGE, false, kuSoundMenuSoundVolumePerc, 1, 0);
+                        #endif
                     }
                 }
                 //item->isDirty = 1;
@@ -487,18 +538,29 @@ void menuPageUpdate( MENUPAGE *page)
     reset(ent, INVISIBLE);
     vec_fill(ent->scale_x, getSmoothGrow180(menuPagePerc*1.8, 1.35)*2);
     ent_bonereset_all(ent);
+    if(menuPagePerc < ent->skill47) ent->skill48 = 0;
+    ent->skill47 = menuPagePerc;
     for(i = 0; i < page->numItemsUsed; i++)
     {
         var scale = clamp(getSmoothGrow180(menuPagePerc*2-45*i-100, 1.35), 0, 1.25);
+        #ifdef INCLUDE_SOUND
+        if(i >= ent->skill48 && scale > 0)
+        {
+            ent->skill48++;
+            kuSoundPlay2D(KS_SFX_MENU_TONE3, false, kuSoundMenuSoundVolumePerc*0.5, 0.85+0.05*i, 0);
+        }
+        #endif
         ent_bonescale(ent, 1+i, vector(scale, scale, scale));
     }
-
     if(inputJustPressed(KUINPUT_BUTTON_BACKMENU) && page->previousID >= 0)
     {
         menuPagePerc = 0;
         menuManager.pageIDActive = page->previousID;
         MENUPAGE *page2 = &menuManager.pages[menuManager.pageIDActive];
-        page2->itemSelected = 0;
+        page2->itemSelected = !menuClosedOnce;
+        #ifdef INCLUDE_SOUND
+            kuSoundPlay2D(KS_SFX_MENU_BACK, false, kuSoundMenuSoundVolumePerc, 1, 0);
+        #endif
     }
 }
 

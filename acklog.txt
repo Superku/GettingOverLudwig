@@ -1,6 +1,6 @@
-Log of A8 Engine 8.47.1 run at Tue Oct 26 20:23:01 2021
+Log of A8 Engine 8.47.1 run at Sat Oct 30 15:30:49 2021
 Hendrik on Windows NT/2000/XP version 6.2 Build 9200
-Options gettingOverLudwig.c -nx 128 -eq -nwnd -diag -ns -te -nx 128
+Options gettingOverLudwig.c -nx 128 -eq -nwnd -diag -ns -te
 App: C:\GStudio8\acknex.exe in C:\GStudio8\LudwigJam\
 
 DI interface opened
@@ -20,24 +20,33 @@ ackXinput.dll opened
 kuSound.dll opened
 Compiling GETTINGOVERLUDWIG.C - [Esc] to abort..
 >>> spearGame.c compile start <<<
-...........................
+................................
 >>> spearGame.c compiled <<<
 ...
-EnumDisplaySettingsExA: function not found............... 0.579 sec
+EnumDisplaySettingsExA: function not found
+kuSoundAutoMusicDo: function not found
+kuSoundCreateDSB8FromFile: function not found
+kuSoundPreloadFileSpecificByID: function not found
+kuSoundSourceInit_IDTypeNamePreload: function not found
+kuSoundThreadStart: function not found
+kuSoundThreadWorker: function not found
+kupackFindFile: function not found
+kupackLoadBuffer: function not found
+kupackRegistryLoad: function not found............... 0.632 sec
 Running GETTINGOVERLUDWIG.C
 13 objects
-Main started at 0.690
+Main started at 0.750
 D3D_Init Window: 640x480 -> Window: 1x640x480x32
 Video memory found: 4093 MB
-LevelInit at 0.779
+LevelInit at 0.842
 57 entities 1 cameras 0 lights 0 sounds 0 paths
  1 lmaps 0 textures...ok
-LevelReady at 0.913
+LevelReady at 0.973
 cached_startup started
-Main loop at 0.941....
-1st frame with 4093 MB. at 1.010
+Main loop at 1.003....
+1st frame with 4093 MB. at 1.241
 D3D_Resize Window: 1920x1920 -> Window: 1x1920x1920x32
-Normal exit at 10.942
+Normal exit at 5.312
 Close level,DLL,objects
 Free input,funcs,panels,defs,syns,views,strings,vars..ok
 Free sounds,bmaps,fonts,hash,defs1,script..ok
@@ -45,8 +54,4 @@ Close dx,multimedia,D3D,engine,nexus..ok
 A8 Engine - Pro Edition V8.47.1 - Mar  9 2016
 (c) Conitec - www.3dgamestudio.com
 Registered to: Felix Pohl
-Unfreed: 1042, CCH, 72 bytes
-Unfreed: 1105, CCH, 72 bytes
-Unfreed: 1107, CH2, 12 bytes
-Unfreed: 1110, CH2, 20 bytes
-Close window at 10.961
+Close window at 5.331
