@@ -1,4 +1,4 @@
-Log of A8 Engine 8.47.1 run at Sat Oct 30 15:30:49 2021
+Log of A8 Engine 8.47.1 run at Tue Nov 09 21:46:53 2021
 Hendrik on Windows NT/2000/XP version 6.2 Build 9200
 Options gettingOverLudwig.c -nx 128 -eq -nwnd -diag -ns -te
 App: C:\GStudio8\acknex.exe in C:\GStudio8\LudwigJam\
@@ -16,11 +16,12 @@ NVIDIA GeForce GTX 1080 pure T&L device 1ff9 detected
 D3D device NVIDIA GeForce GTX 1080 1ff9 selected.
 PATH models\
 PATH shaders\
+kuSound.dll opened
 ackXinput.dll opened
 kuSound.dll opened
 Compiling GETTINGOVERLUDWIG.C - [Esc] to abort..
 >>> spearGame.c compile start <<<
-................................
+.....................................
 >>> spearGame.c compiled <<<
 ...
 EnumDisplaySettingsExA: function not found
@@ -32,21 +33,80 @@ kuSoundThreadStart: function not found
 kuSoundThreadWorker: function not found
 kupackFindFile: function not found
 kupackLoadBuffer: function not found
-kupackRegistryLoad: function not found............... 0.632 sec
+kupackRegistryLoad: function not found
+pX_stats: function not found................. 0.829 sec
 Running GETTINGOVERLUDWIG.C
-13 objects
-Main started at 0.750
+15 objects
+Main started at 0.964
+ >> info from DLL at frame 0: kuSoundLoadFile(): C:\Users\Hendrik\AppData\Roaming\GettingOverLudwig\settings.txt 
+ settingsLoad at frame 0: bufferSize(22)
+ >> info from DLL at frame 0: kuSoundLoadFile(): C:\Users\Hendrik\AppData\Roaming\GettingOverLudwig\settings.txt 
+ - settingsProcess(0,0)
+ - settingsProcess(1,1920)
+ - settingsProcess(2,1200)
+ - settingsProcess(3,2)
+ - settingsProcess(4,3)
+ - settingsProcess(5,7)
+ - settingsProcess(6,0)
+ - settingsProcess(7,1)
 D3D_Init Window: 640x480 -> Window: 1x640x480x32
 Video memory found: 4093 MB
-LevelInit at 0.842
+LevelInit at 1.151
 57 entities 1 cameras 0 lights 0 sounds 0 paths
  1 lmaps 0 textures...ok
-LevelReady at 0.973
+LevelReady at 1.290
+ >> info from DLL at frame 0: kuSoundLoadFile(): C:\Users\Hendrik\AppData\Roaming\GettingOverLudwig\savegame 
+ saveGameLoad at frame 0: bufferSize(140)
+ >> info from DLL at frame 0: kuSoundLoadFile(): C:\Users\Hendrik\AppData\Roaming\GettingOverLudwig\savegame 
+def_startup started
 cached_startup started
-Main loop at 1.003....
-1st frame with 4093 MB. at 1.241
-D3D_Resize Window: 1920x1920 -> Window: 1x1920x1920x32
-Normal exit at 5.312
+frozen_startup started
+Main loop at 1.319
+main function at frame(1): calling kuSoundInit(0024108E)...OK(0, SetCoopLevel 0). calling kuSoundSourcesInit...
+ kuSoundPreloadFiles at frame (1)
+ - sound file(sounds\menuMusic.wav)... size(9216044)
+ - sound file(sounds\introJumpb.wav)... size(76860)
+ - sound file(sounds\deathScare.wav)... size(520400)
+ - sound file(sounds\menuAccept.wav)... size(53064)
+ - sound file(sounds\menuTone4.wav)... size(66744)
+ - sound file(sounds\menuChange.wav)... size(21328)
+ - sound file(sounds\menuSelect.wav)... size(72700)
+ - sound file(sounds\menuTone0.wav)... size(34398)
+ - sound file(sounds\ambientWind0.wav)... size(5655936)
+ - sound file(sounds\ambientWind1.wav)... size(6657240)
+ - sound file(sounds\ambientWater0.wav)... size(4305100)
+ - sound file(sounds\ambientDrone0.wav)... size(7367188)
+ - sound file(sounds\spearHit0.wav)... size(102640)
+ - sound file(sounds\spearHit1.wav)... size(79060)
+ - sound file(sounds\spearLaunch0c.wav)... size(42046)
+ - sound file(sounds\spearLaunch1.wav)... size(129388)
+ - sound file(sounds\playerImpact0.wav)... size(53664)
+ - sound file(sounds\playerImpact1.wav)... size(33756)
+ - sound file(sounds\playerImpact2.wav)... size(57452)
+ - sound file(sounds\win.wav)... size(346724)
+ - sound file(sounds\menuTone0.wav)... size(34398)
+ - sound file(sounds\menuTone1.wav)... size(32614)
+ - sound file(sounds\menuTone2.wav)... size(86368)
+ - sound file(sounds\menuTone3.wav)... size(51568)
+ - sound file(sounds\menuTone4.wav)... size(66744)
+ - sound file(sounds\menuOpen2.wav)... size(88244)
+ - sound file(sounds\menuClose2.wav)... size(88244)
+ - sound file(sounds\menuOpen3.wav)... size(214552)....
+1st frame with 4093 MB. at 2.002
+D3D_Resize Window: 1920x1200 -> Window: 1x1920x1200x32
+ pp_create_rendertargets() at frame 3...END
+pp_setup_viewstages at frame 3 | background_view_active(1024) | backgroundRenderMode(3)
+ pp_remove_rendertargets() at frame 3...END
+ pp_create_rendertargets() at frame 3...END
+pp_setup_viewstages at frame 3 | background_view_active(1024) | backgroundRenderMode(3)
+ >> info from DLL at frame 2127: kuSoundWriteFile(): C:\Users\Hendrik\AppData\Roaming\GettingOverLudwig\savegame 
+ saveGameSave at frame 2127: ires(1)
+kuSoundDestroyDevice() at frame 2128 - START
+kuSoundDestroyDevice() - END
+Normal exit at 19.997
+pp_on_d3d_lost_event() at frame 2128 - remove rendertargets now
+ pp_remove_rendertargets() at frame 2128...END - pp_on_d3d_lost_event: remove rendertargets OK. pp_clear_viewstages now...
+ pp_clear_viewstages at frame 2128.END - pp_on_d3d_lost_event: OK
 Close level,DLL,objects
 Free input,funcs,panels,defs,syns,views,strings,vars..ok
 Free sounds,bmaps,fonts,hash,defs1,script..ok
@@ -54,4 +114,8 @@ Close dx,multimedia,D3D,engine,nexus..ok
 A8 Engine - Pro Edition V8.47.1 - Mar  9 2016
 (c) Conitec - www.3dgamestudio.com
 Registered to: Felix Pohl
-Close window at 5.331
+Unfreed: 1200, CCH, 72 bytes
+Unfreed: 1296, CCH, 72 bytes
+Unfreed: 1298, CH2, 12 bytes
+Unfreed: 1301, CH2, 20 bytes
+Close window at 20.020

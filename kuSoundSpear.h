@@ -145,7 +145,11 @@
 	HANDLE kuSoundMutex, kuSoundWorkerHandle;
 	int kuSoundUpdateNumSounds = 0;
 	double kuSoundUpdateTime = 0;
-	float kuSoundMasterVolume = 0.5;
+	#ifdef DEVTRUE
+		float kuSoundMasterVolume = 1;
+	#else
+		float kuSoundMasterVolume = 0.5;
+	#endif
 	int kuSoundAllSoundsPaused = 0;
 	int kuSoundInitErrorCode = 0;
 	int kuSoundInitialized = 0;

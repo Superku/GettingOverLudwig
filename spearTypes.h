@@ -14,6 +14,7 @@ var menuOpenPerc = 0;
 var menuPagePerc = 0;
 var menuTitleScreenPerc = 0;
 var menuTitleHidePerc = 100;
+var menuFullscreenWanted = 1;
 var screenSizeWantedX = 1280;
 var screenSizeWantedY = 720;
 var showFPS = 1;

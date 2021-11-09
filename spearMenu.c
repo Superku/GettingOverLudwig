@@ -45,8 +45,11 @@ BMAP* hexagonsNM_tga = "hexagons3NM.tga";
 
 int fpsCapModeActive = 2;
 int fpsCapModes[6] = { 60, 75, 120, 144, 160, 240 };
-int kuSoundMasterVolumeInt = 5;
-
+#ifdef DEVTRUE
+	float kuSoundMasterVolumeInt = 10;
+#else
+	float kuSoundMasterVolumeInt = 5;
+#endif
 ////////////////////////////////////////////
 
 void menuClearBeforeLevelLoad()
@@ -262,6 +265,7 @@ void menuPageUpdateStrings(MENUPAGE *page)
 
 void gameQuit();
 void mapLoad();
+void settingsSave();
 
 void itemEventExecute(MENUPAGE *page, MENUITEM *item, int eventID)
 {
@@ -304,6 +308,7 @@ void itemEventExecute(MENUPAGE *page, MENUITEM *item, int eventID)
         menuManager.pageIDActive = page->previousID;
         MENUPAGE *page2 = &menuManager.pages[MENUPAGE_MAIN];
         page2->itemSelected = !menuClosedOnce;
+        settingsSave();
         #ifdef INCLUDE_SOUND
             kuSoundPlay2D(KS_SFX_MENU_BACK, false, kuSoundMenuSoundVolumePerc, 1, 0);
         #endif
@@ -350,14 +355,18 @@ void menuSetMonitorMode(int monitorWanted)
 	    //video_set(screenSizeWantedX, screenSizeWantedY, 0, 0);
         wait(1);
         video_window(NULL,NULL,244,NULL); // 128+64+16+32+4 = 244
+        menuFullscreenWanted = 0;
     }
     else
     {
+        menuFullscreenWanted = 1;
         video_window(NULL,NULL,1,NULL);
         wait(1);
         screenSizeWantedX = sys_metrics(0);
         screenSizeWantedY = sys_metrics(1);
 	    video_set(screenSizeWantedX, screenSizeWantedY, 0, 0);
+        wait(1);
+        SetWindowPos(hWnd,HWND_TOP,0,0,0,0, SWP_SHOWWINDOW | SWP_NOSIZE);
     }
     /*pp_clear_viewstages();
     wait(3);*/
@@ -558,6 +567,7 @@ void menuPageUpdate( MENUPAGE *page)
         menuManager.pageIDActive = page->previousID;
         MENUPAGE *page2 = &menuManager.pages[menuManager.pageIDActive];
         page2->itemSelected = !menuClosedOnce;
+        settingsSave();
         #ifdef INCLUDE_SOUND
             kuSoundPlay2D(KS_SFX_MENU_BACK, false, kuSoundMenuSoundVolumePerc, 1, 0);
         #endif
@@ -573,10 +583,10 @@ void menuManagerInit()
         MENUPAGE *page = &menuManager.pages[MENUPAGE_MAIN];
         page->ID = MENUPAGE_MAIN;
         page->previousID = -1;
-        page->itemSelected = 1;
+        page->itemSelected = !menuClosedOnce;
     
         MENUITEM *item = menuPageItemAdd(page, "CONTINUE", NULL, MENUITEM_TYPE_LEFT, 2);
-        item->isGreyedOut = 1;
+        item->isGreyedOut = !menuClosedOnce;
 
         MENUITEM *item = menuPageItemAdd(page, "NEW GAME", NULL, MENUITEM_TYPE_LEFT, 1);
 
@@ -596,7 +606,7 @@ void menuManagerInit()
     
         //MENUITEM* menuPageItemAddArrows(MENUPAGE *page, char *cTitle, char *cValue, int type, int eventID, void *pVar, var varMin, var varMax)
         MENUITEM *item = menuPageItemAdd(page, "FULLSCREEN", NULL, MENUITEM_TYPE_ARROWS, 100);
-        if(item) item->isYesNo = 1;
+        if(item) item->isYesNo = menuFullscreenWanted;
 
         MENUITEM *item = menuPageItemAdd(page, "RESOLUTION", NULL, MENUITEM_TYPE_ARROWS, 101);
 
@@ -605,15 +615,15 @@ void menuManagerInit()
         MENUITEM *item = menuPageItemAdd(page, "BACKGROUND STYLE", NULL, MENUITEM_TYPE_ARROWS, 107);
 
         MENUITEM *item = menuPageItemAdd(page, "VOLUME", "< 10>", MENUITEM_TYPE_ARROWS, 103);
-        item->isGreyedOut = 1;
+        //item->isGreyedOut = 1;
 
         MENUITEM *item = menuPageItemAdd(page, "LEFT-RIGHT INVERTED", "<YES>", MENUITEM_TYPE_ARROWS, 104);
-        if(item) item->isYesNo = 0;
+        if(item) item->isYesNo = playerLeftRightInverted;
         
         //MENUITEM *item = menuPageItemAdd(page, "AMBIENCE", NULL, MENUITEM_TYPE_LEFT, -1);
 
         MENUITEM *item = menuPageItemAdd(page, "SHOW TIMER", NULL, MENUITEM_TYPE_ARROWS, 105);
-        if(item) item->isYesNo = 1;
+        if(item) item->isYesNo = showTimer;
 
        // MENUITEM *item = menuPageItemAdd(page, "SHOW SPLITS", NULL, MENUITEM_TYPE_ARROWS, 106);
         //if(item) item->isYesNo = 0;
@@ -638,6 +648,21 @@ You'll get over him in no time!
 
 void menuUpdate()
 {
+	/*#ifdef DEVTRUE // trailer stuff
+	if(key_e) 
+	{
+		    int i;
+    for(i = 0; i < 2; i++)
+    {
+        MENUPAGE *page = &menuManager.pages[i];
+        if(page->ent) set(page->ent, INVISIBLE);
+    }
+
+    set(menuManager.entBackground, INVISIBLE);
+    set(menuManager.entTitlescreen, INVISIBLE);
+    set(menuManager.entBlackPlane, INVISIBLE);
+    }
+	#endif*/
     //draw_text2("menuUpdate", 20, 20, COLOR_RED);
     if(menuIntroState < 11)
     {
@@ -751,9 +776,9 @@ void menuUpdate()
     }
 
     ENTITY* entBackground = menuManager.entBackground;
-	#ifdef DEVTRUE
+	/*#ifdef DEVTRUE
         if(key_e) entBackground.y = camera.y+512;
-    #endif
+    #endif*/
     ENTITY* entTitlescreen = menuManager.entTitlescreen;
     entTitlescreen.emask |= DYNAMIC;
     entTitlescreen.x = entBackground.x;

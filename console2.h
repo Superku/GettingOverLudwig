@@ -11,7 +11,7 @@
 	long WINAPI SetConsoleActiveScreenBuffer(long hConsoleOutput);
 	long GConsoleBuffer;
 	int consoleInitialized = 0;
-	#ifdef DEVTRUEAA
+	#ifdef DEVTRUE
 		int consolePrintTrue = 1;
 		int consolePrintTarget = 2;
 		#else

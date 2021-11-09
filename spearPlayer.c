@@ -11,7 +11,6 @@ VECTOR rotationPrevBone1Pos, rotationPrevBone1Pos2;
 typedef struct _SPEARPLAYER
 {
     // pos is based on ENTITY position (because we use the engine's native collision detection function to move it)
-	ENTITY* entContact;
     VECTOR speed;
     VECTOR contactPos;
 	VECTOR surfaceNormal;
@@ -183,6 +182,70 @@ var thickHullTrace(ENTITY* ent, VECTOR* vstart, VECTOR* vtarget, var mode, var r
 
 void spearUIDo();
 
+BMAP* gpadMapping_tga = "gpadMapping1024.tga";
+void drawButton_module(int buttonID, var x, var y)
+{
+	VECTOR offset; offset.x = offset.y = 0;
+	int controlType = inputTypeActive;
+	if(controlType == 0)
+	{
+		switch(buttonID)
+		{
+			case 0: // jump
+			//if(mouse_moving) offset.x = 320;
+			offset.y = 192;
+			break;
+
+			case 1: // left
+			offset.x = 128;
+			offset.y = 192;
+			break;
+
+			case 2: // right
+			offset.x = 192;
+			offset.y = 192;
+			break;
+		}
+	}
+	else
+	{
+		offset.y = 64;
+		switch(buttonID)
+		{
+			case 0: // jump
+			offset.x = 768;
+			break;
+
+			case 1: // left
+			offset.x = 384;
+			break;
+
+			case 2: // right
+			offset.x = 448;
+			break;
+		}
+	}
+	draw_quad(gpadMapping_tga,vector(x-32,y-32,0),vector(offset.x,offset.y,0),vector(64,64,0),NULL,NULL,100,0);
+}
+void drawButton(int buttonID, VECTOR* vpos3D, VECTOR* vpos2D)
+{
+	VECTOR pos, offset;
+	if(!vpos2D)
+	{
+		vec_set(pos, vpos3D);
+		if(!vec_to_screen(pos, camera)) return;
+	}
+	else vec_set(pos, vpos2D);
+	if(buttonID == 10)
+	{
+		var dist = 220*(0.25+0.75*(float)screen_size.x/1920.0);
+		drawButton_module(1, pos.x-dist, pos.y);
+		drawButton_module(2, pos.x+dist, pos.y);
+		drawButton_module(0, pos.x, pos.y+dist);
+	}
+	else drawButton_module(buttonID, pos.x, pos.y);
+}
+
 void playerMove()
 {
     playerDataPointer = &gameData.playerData;
@@ -280,9 +343,9 @@ void playerMove()
 		set(entCharacter,INVISIBLE);
 		set(entSpear2,INVISIBLE);
 
-	#ifdef DEVTRUE
+	/*#ifdef DEVTRUE
         if(key_e) entHoneyCombo.y = camera.y+512-256; // screenshot
-    #endif
+    #endif*/
 		return;
 	}
     if(playerFrozen || menuIntroState < 100) return;
@@ -448,12 +511,11 @@ void playerMove()
 	if(playerDataPointer->justLaunchedTimer > 0)
 	{
 		playerDataPointer->groundContact = 0;
-		playerDataPointer->entContact = NULL;
+		//playerDataPointer->entContact = NULL; // removed
 	}
 	else
 	{
 		thickHullTrace(entDummy, temp, temp3, IGNORE_PASSABLE | IGNORE_SPRITES | IGNORE_PUSH | IGNORE_ME | IGNORE_FLAG2, 2);
-		playerDataPointer->entContact = you;
 		playerDataPointer->surfaceAngle = atan2v(normal.z,normal.x);
 		if(c_move_HIT_TARGET && trace_hit)
 		{
@@ -741,6 +803,10 @@ void playerMove()
 	gameData.timeCombined += (var)gameData.timeFloat;
 
 	spearUIDo();
+	static var drawTimer = 10*16;
+	if(drawTimer > 0) drawTimer -= time_step;
+	if(drawTimer < 8*16 && drawTimer > 0) drawButton(10, entDummy.x, NULL);
+
 
 	if(entDummy.z < -4580)
 	{
@@ -801,6 +867,7 @@ void draw_slider(STRING* str, STRING* str2, var* pvar, var vmin, var vmax, var p
 
 action geoPainter_act()
 {
+	return;
 	int numVerts = ent_status(my,1);
 	cprintf1("\n <WARNING!> geoPainter_act: numVerts: %d",numVerts);
 	on_f = playerFrozenToggle;

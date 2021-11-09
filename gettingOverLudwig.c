@@ -79,11 +79,6 @@ void gameUpdate()
     cameraMove(1);
 }
 
-void gameQuit()
-{
-    sys_exit("");
-}
-
 void on_exit_event()
 {
     #ifdef INCLUDE_SOUND
@@ -149,6 +144,151 @@ void take_screenshot()
 	freeze_mode = 0;
 }
 
+int kuSoundLoadFile(int fileID, char* buffer);
+int kuSoundWriteFile(int fileID, char* buffer, int bufferSize);
+int kuSoundDeleteFileW();
+
+void ackSuperkuDLLUpdateReceive(char* c)
+{
+	cprintf2("\n >> info from DLL at frame %d: %s",(int)total_frames,c);
+}
+
+void settingsProcess(int settingsSlot, int number)
+{
+    if(number < 0 || number > 9000) return; // just in case
+    cprintf2("\n - settingsProcess(%d,%d)", settingsSlot, number);
+    switch(settingsSlot)
+    {
+        case 0:
+        menuFullscreenWanted = !!number;
+        break;
+
+        case 1:
+        screenSizeWantedX = number;
+        break;
+        
+        case 2:
+        screenSizeWantedY = number;
+        break;
+        
+        case 3:
+        fpsCapModeActive = clamp(number, 0, 5);
+        break;
+        
+        case 4:
+        backgroundRenderMode = clamp(number, 0, 3);
+        break;
+        
+        case 5:
+        kuSoundMasterVolumeInt = clamp(number, 0, 10);
+        kuSoundSetMasterVolumeIn100(kuSoundMasterVolumeInt*10);
+        break;
+        
+        case 6:
+        playerLeftRightInverted = !!number;
+        break;
+        
+        case 7:
+        showTimer = !!number;
+        break;
+        
+    }
+}
+
+int settingsLoad()
+{
+    int bufferSize = kuSoundLoadFile(0, NULL);
+    cprintf2("\n settingsLoad at frame %d: bufferSize(%d)", ITF, bufferSize);
+    if(bufferSize <= 10) return 0;
+    char* buffer = (char*)sys_malloc(bufferSize);
+    kuSoundLoadFile(0, buffer);
+    char *workbuffer = buffer;
+    int number = 0;
+    int numberProcessed = 0;
+    int settingsSlot = 0;
+    while(*workbuffer != 0)
+    {
+        //cprintf1("[%x]", *workbuffer);
+        if(*workbuffer == '\n')
+        {
+            workbuffer++;
+            settingsProcess(settingsSlot, number);
+            number = 0;
+            numberProcessed = 1;
+            settingsSlot++;
+        }
+        if(*workbuffer >= 48 && *workbuffer <= 57)
+        {
+            number *= 10;
+            number += (*workbuffer)-48;
+            numberProcessed = 0;
+        }
+        workbuffer++;
+    }
+    if(!numberProcessed) settingsProcess(settingsSlot, number);
+    sys_free(buffer);
+    return 1;
+}
+
+void settingsSave()
+{
+    STRING* str = str_create("");
+    str_printf(str,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", (int)menuFullscreenWanted, (int)screenSizeWantedX, (int)screenSizeWantedY,
+    (int)fpsCapModeActive, (int)backgroundRenderMode, (int)kuSoundMasterVolumeInt, (int)playerLeftRightInverted, (int)showTimer);
+    //printf("%s", str->chars);
+    int ires = kuSoundWriteFile(0, str->chars, str->length);
+    cprintf2("\n settingsSave at frame %d: ires(%d)", ITF, ires);
+    ptr_remove(str);
+}
+
+void saveGameLoad()
+{
+    //int ires = kuSoundDeleteFileW();
+    //cprintf2("\n saveGameLoad at frame %d: ires(%d)", ITF, ires);
+    int bufferSize = kuSoundLoadFile(1, NULL);
+    cprintf2("\n saveGameLoad at frame %d: bufferSize(%d)", ITF, bufferSize);
+    if(bufferSize <= 10) return 0;
+    char* buffer = (char*)sys_malloc(bufferSize);
+    kuSoundLoadFile(1, buffer);
+    var playerPosition[2];
+    memcpy(playerPosition, buffer, 8);
+    memcpy(gameData, &buffer[8], sizeof(SPEARGAME));
+    playerDataPointer = &gameData.playerData;
+    if(entityContainer.entDummy)
+    {
+        vec_set(entityContainer.entDummy.x, vector(playerPosition[0],0,playerPosition[1]));
+		if(entityContainer.entHoneyCombo)
+        {
+            ent_animate(entityContainer.entHoneyCombo, "loadLeft", 0, 0);
+            entityContainer.entHoneyCombo.tilt = playerDataPointer->angle;
+        }
+    }
+    menuClosedOnce = 1;
+    menuIntroState = 100;
+    sys_free(buffer);
+}
+
+void saveGameSave()
+{
+    int bufferSize = 8 + sizeof(SPEARGAME);
+    char* buffer = (char*)sys_malloc(bufferSize);
+    var playerPosition[2];
+    playerPosition[0] = playerPosLocal.x;
+    playerPosition[1] = playerPosLocal.z;
+    memcpy(buffer, playerPosition, 8);
+    memcpy(&buffer[8], gameData, sizeof(SPEARGAME));
+    int ires = kuSoundWriteFile(1, buffer, bufferSize);
+    cprintf2("\n saveGameSave at frame %d: ires(%d)", ITF, ires);
+    sys_free(buffer);
+}
+
+void gameQuit()
+{
+    saveGameSave();
+    wait(1);
+    sys_exit("");
+}
+
 void main()
 {
     set(camera, NOSHADOW); 
@@ -163,7 +303,13 @@ void main()
 	max_entities = 10000;
     collision_mode = 2;
     //master_vol = 50;
+    //on_e = settingsSave;
+   // on_f = saveGameSave;
+    screenSizeWantedX = sys_metrics(0);
+    screenSizeWantedY = sys_metrics(1);
+    settingsLoad();
     mapLoad();
+    saveGameLoad();
     menuOpen();
     //menuOpenPerc = 100;
     vec_set(sky_color, vector(20,180,250));
@@ -190,14 +336,12 @@ void main()
     on_esc = NULL;  //menuToggle
     on_exit = on_exit_event;
 
-    video_window(NULL, NULL, 1, "Getting over... Ludwig");
+    video_window(NULL, NULL, !!menuFullscreenWanted, "Getting over... Ludwig");
     wait(1);
-    screenSizeWantedX = sys_metrics(0);
-    screenSizeWantedY = sys_metrics(1);
     video_set(screenSizeWantedX, screenSizeWantedY, 32, 0);
     //video_set(1280, 720, 32, 0);
     wait(1);
-	SetWindowPos(hWnd,HWND_TOP,0,0,0,0, SWP_SHOWWINDOW | SWP_NOSIZE); // | SWP_NOMOVE | SWP_NOSIZE  | SWP_NOMOVE
+	if(menuFullscreenWanted) SetWindowPos(hWnd,HWND_TOP,0,0,0,0, SWP_SHOWWINDOW | SWP_NOSIZE); // | SWP_NOMOVE | SWP_NOSIZE  | SWP_NOMOVE // menuFullscreenWanted
     pp_init();
     #ifdef INCLUDE_SOUND
         KUSOUND_INSTANCE_MUSIC = kuSoundPlay2D(KS_MUSIC_MENU, true, 100, 1, 0);

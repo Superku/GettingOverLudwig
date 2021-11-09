@@ -42,10 +42,10 @@ void inputUpdate(int inputAllowed, int menuActive)
 	button->value = (key_esc*menuActive) + ackXInputGetButtonState3(13);
 	
 
-	if(key_any || mouse_moving)
+	if(forceX > 0.5 || forceY > 0.5 || ackXInputGetButtonState3(5) || ackXInputGetButtonState3(12)) inputTypeActiveNew = 1;
+	else
 	{
-		if(forceX > 0.5 || forceY > 0.5 || ackXInputGetButtonState3(5) || ackXInputGetButtonState3(12)) inputTypeActiveNew = 1;
-		else inputTypeActiveNew = 0;
+		if(key_any && (key_lastpressed < 250 || key_lastpressed >= 280)) inputTypeActiveNew = 0; // mouse_moving
 	}
 
 	for(j = 0; j < KUINPUT_BUTTON_NUM; j++)
